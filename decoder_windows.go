@@ -24,12 +24,20 @@ func NewDecoder(sampleRate int, channels int) (*Decoder, error) {
 	return &Decoder{mem, p, sampleRate, channels}, nil
 }
 
-// DecodeFloat decodes opus encoded byte array to float32 array
-func (d *Decoder) DecodeFloat(in []byte, out []float32) (int, error) {
-	return 0, nil
-}
-
 // Decode decodes opus encoded byte array to int16 array
 func (d *Decoder) Decode(in []byte, out []int16) (int, error) {
-	return 0, nil
+	n := opus_decode(d.p, in, int32(cap(in)), out, len(out))
+	if n < 0 {
+		return 0, Error(n)
+	}
+	return n, nil
+}
+
+// DecodeFloat decodes opus encoded byte array to float32 array
+func (d *Decoder) DecodeFloat(in []byte, out []float32) (int, error) {
+	n := opus_decode_float(d.p, in, int32(cap(in)), out, len(out))
+	if n < 0 {
+		return 0, Error(n)
+	}
+	return n, nil
 }
