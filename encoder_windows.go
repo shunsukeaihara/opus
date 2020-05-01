@@ -107,7 +107,7 @@ func (e *Encoder) Bitrate() (int, error) {
 
 // Encode encodes int16 pcm to encoded byte array
 func (e *Encoder) Encode(in []int16, out []byte) (int, error) {
-	n := opus_encode(e.p, in, len(in), out, int32(cap(out)))
+	n := opus_encode(e.p, in, out)
 	if n < 0 {
 		return 0, Error(n)
 	}
@@ -116,7 +116,7 @@ func (e *Encoder) Encode(in []int16, out []byte) (int, error) {
 
 // EncodeFloat encodes float32 pcm to encoded byte array
 func (e *Encoder) EncodeFloat(in []float32, out []byte) (int, error) {
-	n := opus_encode_float(e.p, in, len(in), out, int32(cap(out)))
+	n := opus_encode_float(e.p, in, out)
 	if n < 0 {
 		return 0, Error(n)
 	}
