@@ -86,7 +86,39 @@ func (e *Encoder) MaxBandwidth() (BandWidth, error) {
 	return BandWidth(out), nil
 }
 
+// SetBitrate sets bitrate to encoder
+func (e *Encoder) SetBitrate(bitrate int) error {
+	res := opus_encoder_ctl(e.p, setBitrateRequest, int32(bitrate))
+	if res != 0 {
+		return Error(res)
+	}
+	return nil
+}
+
+// Bitrate returns bitrate of encoder
+func (e *Encoder) Bitrate() (int, error) {
+	var out int32
+	res := opus_encoder_get_ctl(e.p, getBitrateRequest, &out)
+	if res != 0 {
+		return 0, Error(res)
+	}
+	return int(res), nil
+}
+
+// Encode encodes int16 pcm to encoded byte array
+func (e *Encoder) Encode(in []int16, out []byte) (int, error) {
+	n := opus_encode(e.p, in, len(in), out, int32(cap(out)))
+	if n < 0 {
+		return 0, Error(n)
+	}
+	return n, nil
+}
+
 // EncodeFloat encodes float32 pcm to encoded byte array
-func (e *Encoder) EncodeFloat() (int, error) {
-	return 0, nil
+func (e *Encoder) EncodeFloat(in []float32, out []byte) (int, error) {
+	n := opus_encode_float(e.p, in, len(in), out, int32(cap(out)))
+	if n < 0 {
+		return 0, Error(n)
+	}
+	return n, nil
 }

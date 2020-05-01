@@ -44,6 +44,9 @@ var (
 	procopus_encoder_get_size = modopus.NewProc("opus_encoder_get_size")
 	procopus_encoder_init     = modopus.NewProc("opus_encoder_init")
 	procopus_encoder_ctl      = modopus.NewProc("opus_encoder_ctl")
+	procopus_encoder_get_ctl  = modopus.NewProc("opus_encoder_ctl")
+	procopus_encode           = modopus.NewProc("opus_encode")
+	procopus_encode_float     = modopus.NewProc("opus_encode_float")
 )
 
 func opus_decoder_get_size(channles int) (size int) {
@@ -107,5 +110,33 @@ func opus_encoder_ctl(p unsafe.Pointer, reqType int, req int32) (res int) {
 func opus_encoder_get_ctl(p unsafe.Pointer, reqType int, req *int32) (res int) {
 	r0, _, _ := syscall.Syscall(procopus_encoder_ctl.Addr(), 3, uintptr(p), uintptr(reqType), uintptr(unsafe.Pointer(req)))
 	res = int(r0)
+	return
+}
+
+func opus_encode(p unsafe.Pointer, pcm []int16, length int, out []byte, cap int32) (n int) {
+	var _p0 *int16
+	if len(pcm) > 0 {
+		_p0 = &pcm[0]
+	}
+	var _p1 *byte
+	if len(out) > 0 {
+		_p1 = &out[0]
+	}
+	r0, _, _ := syscall.Syscall9(procopus_encode.Addr(), 7, uintptr(p), uintptr(unsafe.Pointer(_p0)), uintptr(len(pcm)), uintptr(length), uintptr(unsafe.Pointer(_p1)), uintptr(len(out)), uintptr(cap), 0, 0)
+	n = int(r0)
+	return
+}
+
+func opus_encode_float(p unsafe.Pointer, pcm []float32, length int, out []byte, cap int32) (n int) {
+	var _p0 *float32
+	if len(pcm) > 0 {
+		_p0 = &pcm[0]
+	}
+	var _p1 *byte
+	if len(out) > 0 {
+		_p1 = &out[0]
+	}
+	r0, _, _ := syscall.Syscall9(procopus_encode_float.Addr(), 7, uintptr(p), uintptr(unsafe.Pointer(_p0)), uintptr(len(pcm)), uintptr(length), uintptr(unsafe.Pointer(_p1)), uintptr(len(out)), uintptr(cap), 0, 0)
+	n = int(r0)
 	return
 }
