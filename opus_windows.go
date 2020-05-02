@@ -61,7 +61,7 @@ func opus_decoder_init(p unsafe.Pointer, sampleRate int32, channels int) (err in
 	return
 }
 
-func opus_decode(p unsafe.Pointer, data []byte, out []int16) (n int) {
+func opus_decode(p unsafe.Pointer, data []byte, out []int16, channels int) (n int) {
 	var _p0 *byte
 	if len(data) > 0 {
 		_p0 = &data[0]
@@ -70,12 +70,12 @@ func opus_decode(p unsafe.Pointer, data []byte, out []int16) (n int) {
 	if len(out) > 0 {
 		_p1 = &out[0]
 	}
-	r0, _, _ := syscall.Syscall6(procopus_decode.Addr(), 5, uintptr(p), uintptr(unsafe.Pointer(_p0)), uintptr(len(data)), uintptr(unsafe.Pointer(_p1)), uintptr(len(out)), 0)
+	r0, _, _ := syscall.Syscall6(procopus_decode.Addr(), 6, uintptr(p), uintptr(unsafe.Pointer(_p0)), uintptr(int32(len(data))), uintptr(unsafe.Pointer(_p1)), uintptr(cap(out)/channels), 0)
 	n = int(r0)
 	return
 }
 
-func opus_decode_float(p unsafe.Pointer, data []byte, out []float32) (n int) {
+func opus_decode_float(p unsafe.Pointer, data []byte, out []float32, channels int) (n int) {
 	var _p0 *byte
 	if len(data) > 0 {
 		_p0 = &data[0]
@@ -84,7 +84,7 @@ func opus_decode_float(p unsafe.Pointer, data []byte, out []float32) (n int) {
 	if len(out) > 0 {
 		_p1 = &out[0]
 	}
-	r0, _, _ := syscall.Syscall6(procopus_decode_float.Addr(), 5, uintptr(p), uintptr(unsafe.Pointer(_p0)), uintptr(len(data)), uintptr(unsafe.Pointer(_p1)), uintptr(len(out)), 0)
+	r0, _, _ := syscall.Syscall6(procopus_decode_float.Addr(), 6, uintptr(p), uintptr(unsafe.Pointer(_p0)), uintptr(int32(len(data))), uintptr(unsafe.Pointer(_p1)), uintptr(cap(out)/channels), 0)
 	n = int(r0)
 	return
 }
