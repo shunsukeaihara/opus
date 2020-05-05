@@ -36,7 +36,7 @@ func (d *Decoder) Decode(in []byte, out []int16) (int, error) {
 }
 
 // DecodeFloat decodes opus encoded byte array to float32 array
-func (d *Decoder) DecodeFloat(in []byte, out []float32) (int, error) {
+func (d *Decoder) DecodeFloat32(in []byte, out []float32) (int, error) {
 	n := opus_decode_float(d.p, in, out, d.channels)
 	if n < 0 {
 		return 0, Error(n)

@@ -117,7 +117,7 @@ func (e *Encoder) Encode(in []int16, out []byte) (int, error) {
 }
 
 // EncodeFloat encodes float32 pcm to encoded byte array
-func (e *Encoder) EncodeFloat(in []float32, out []byte) (int, error) {
+func (e *Encoder) EncodeFloat32(in []float32, out []byte) (int, error) {
 	n := opus_encode_float(e.p, in, out, e.channels)
 	if n < 0 {
 		return 0, Error(n)
