@@ -1,3 +1,5 @@
+// +build windows
+
 package opus
 
 //go:generate go run $GOROOT/src/syscall/mksyscall_windows.go -systemdll=false -output opus_windows.go genopus_windows.go

@@ -1,3 +1,5 @@
+// +build windows
+
 package opus
 
 //Error is type of opus error
